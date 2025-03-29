@@ -21,21 +21,42 @@
   </head>
   <body>
     <x-header />
-    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      @auth
-        <p>Hi, {{ auth()->user()->name }}!</p>
-        <a href="/v1/api/logout">
-          <button class="btn btn-sm btn-primary">Logout</button>
-        </a>
-      @else
-        <h1>You are not logged in</h1>
-        <a href="/login">
-          <button class="btn btn-sm btn-primary">Login</button>
-        </a>
-        <a href="/signup">
-          <button class="btn btn-sm btn-primary">Signup</button>
-        </a>
-      @endauth
+    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex">
+      <aside class="max-w-[300px] min-h-[80dvh] border-r border-base-content/10 px-3">
+        <h1 class="pl-4 mb-2 text-lg text-base-content/70">Stalls</h1>
+        <div class="flex flex-col">
+          @foreach ($stalls as $stall)
+          <a href="/stalls/{{$stall->id}}">
+            <button class="btn btn-block text-base-content/70 btn-primary btn-ghost justify-start">
+              {{$stall->name}} - {{$stall->location}}
+            </button>
+          </a>
+          @endforeach
+        </div>
+      </aside>
+
+      <section class="px-5">
+        <h1 class="mb-3 text-lg text-base-content/70">Popular Items</h1>
+        @foreach ($menu_items as $menu_item)
+          <article class="card bg-base-200 w-72 shadow-sm relative overflow-hidden">
+            <span class="absolute top-2 right-2 badge badge-secondary">P{{ $menu_item->price }}</span>
+            <figure>
+              <img
+                class="h-36 w-full object-cover"
+                src="{{ $menu_item->image ? asset('storage/' . $menu_item->image) : 'https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp' }}"
+              />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">{{ $menu_item->name }}</h2>
+              <p class="text-base-content/70">{{ $menu_item->description }}</p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary btn-sm">Buy Now</button>
+              </div>
+            </div>
+          </article>
+        @endforeach
+      </section>
+
     </main>
     <livewire:scripts />
   </body>
